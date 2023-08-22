@@ -1,0 +1,17 @@
+@import "../layout/layout";
+@import "../layout/reset";
+
+@font-face {
+    font-family: 'cjkFonts';
+    src: url('../font/cjkFonts.ttf')format('truetype');
+}
+
+@font-face {
+    font-family: 'anzumoji';
+    src: url('../font/AP_anzumoji2020.ttf')format('truetype');
+}
+
+@font-face {
+    font-family: 'anzumoji_mono';
+    src: url('../font/APT_anzumoji2020_monospace.ttf')format('truetype');
+}
