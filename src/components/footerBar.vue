@@ -5,7 +5,8 @@ export default {
 </script>
 <template >
   <div class="footer">
-    <h2>copy right by Nana Weng 2023<br>
+    <h2>
+      copy right by Nana Weng 2023 <br>
       <i class="fa-solid fa-feather fa-sm" style="color: #000000;"></i>
     </h2>
   </div>
@@ -17,7 +18,7 @@ export default {
 
   height: 70px;
   width: 100%;
-  background-color: #fff196;
+  background-color: #90bdb3;
   text-align: center;
 
   h2 {

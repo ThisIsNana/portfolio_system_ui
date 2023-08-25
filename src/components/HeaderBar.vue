@@ -6,18 +6,18 @@
     <nav>
       <RouterLink to="/">
         <i class="fa-solid fa-house-chimney fa-sm"></i> ホームページ
-      </RouterLink>
-      <RouterLink to="/news">
+      </RouterLink> |
+      <!-- <RouterLink to="/news">
         <i class="fa-solid fa-newspaper fa-sm"></i> ニュース
+      </RouterLink> -->
+      <RouterLink to="/addNews">
+        <i class="fa-solid fa-circle-plus fa-sm"></i> ニュース追加
+      </RouterLink> |
+      <RouterLink to="/login">
+        <i class="fa-solid fa-user fa-sm"></i> ログイン
       </RouterLink>
     </nav>
 
-    <div class="header">
-      <h2>
-        <i class="fa-solid fa-kiwi-bird fa-sm" style="color: #000000;"></i>
-        個人資料管理システム
-      </h2>
-    </div>
 
   </header>
 </template>
@@ -25,33 +25,25 @@
 <style lang="scss" scoped>
 header {
   nav {
-    background-color: #fff196;
+    background-color: #ffffff;
     display: flex;
     justify-content: end;
+    align-items: center;
 
     a {
-      margin: 10px;
-      color: #616161;
+      padding: 5px;
+      margin: 3px 5px;
+      color: #90bdb3;
+      transition: 0.5s;
+      border-radius: 10px;
 
       &:hover {
-        color: #8d8d8d;
+        color: #FFFFFF;
+        background-color: #90bdb3;
       }
     }
 
   }
 
-  .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff8ca;
-    height: 100px;
-
-
-    h2 {
-      text-align: center;
-      font-size: 48px;
-    }
-  }
 }
 </style>
