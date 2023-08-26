@@ -14,6 +14,7 @@ export default {
       alt="作業中">
   </div>
 </template>
+
 <style lang="scss" scoped>
 .header {
   display: flex;
