@@ -27,6 +27,7 @@ export default {
 
       //環境變數API
       addNewsAPI: import.meta.env.VITE_ADD_NEWS,
+      updateNewsAPI: import.meta.env.VITE_UPDATE_NEWS,
 
       // 加入loading
       isLoading: true,
@@ -41,7 +42,7 @@ export default {
   },
   created() {
 
-    //取網址上的newsId
+    // 取網址上的newsId
     const newsId = this.$route.params.newsId;
     this.newsId = newsId;
 
@@ -49,15 +50,18 @@ export default {
     this.newsCategory1 = new Set(JSON.parse(sessionStorage.getItem('newsCategory1')));
     this.newsCategory2 = new Set(JSON.parse(sessionStorage.getItem('newsCategory2')));
 
+    // 現在的日期
+    let today = new Date();
 
-    // 編輯模式
+
+
     if (newsId != 0) {
-      // 抓session
+      // 編輯模式>>
       this.newNews = JSON.parse(sessionStorage.getItem('existNews'));
       console.log(this.newNews);
     }
-    // 新增模式
     else {
+      // 新增模式>>
       this.newNews = JSON.parse(sessionStorage.getItem('newNews'));
       console.log(this.newNews);
     }
@@ -65,7 +69,8 @@ export default {
     this.newTitle = this.newNews.newsTitle;
     this.newCategory = this.newNews.newsCategory;
     this.showCreateDate = this.newNews.newsCreateDate;
-    this.showUpdateDate = this.newNews.newsUpdateDate;
+    this.showUpdateDate = today.toLocaleDateString();
+    this.newsUpdateDate = today;
     this.content = this.newNews.newsDescription.replaceAll("<br>", "\n");
 
     let newCategoryArr = this.newCategory.split(",");
@@ -89,37 +94,93 @@ export default {
 
       let newDescription = this.content.replaceAll("\n", "<br>");
 
-      let addNewsData = {
-        "news_title": this.newTitle,
-        "news_category": newCategory,
-        "news_create_date": this.newsCreateDate,
-        "news_update_date": this.newsUpdateDate,
-        "news_description": newDescription,
-      }
-      axios({
-        method: 'POST',
-        url: this.addNewsAPI,
-        data: addNewsData,
-      })
-        .then(response => {
-          const data = response.data;
-          console.log(data);
+      // 編輯模式
+      if (this.newsId != 0) {
 
-          this.$swal({
-            icon: 'success',
-            title: 'ニュース追加成功しました，自動的にニュース一覧に移動します',
-            timerProgressBar: true,
-            timer: 3000,
-          })
-            .then((result) => {
-              setTimeout(() => {
-                this.$router.push('/');
-              }, 500); // 延遲 0.5 秒後跳頁
+        let addNewsData = {
+          "update_news_id": this.newsId,
+          "update_title": this.newTitle,
+          "update_category": newCategory,
+          "update_update_date": this.newsUpdateDate,
+          "update_description": newDescription,
+        }
+
+
+        axios({
+          method: 'POST',
+          url: this.updateNewsAPI,
+          data: addNewsData,
+        })
+          .then(response => {
+            const data = response.data;
+            console.log(data);
+
+            this.$swal({
+              icon: 'success',
+              title: 'ニュース編集成功しました，自動的にニュース一覧に移動します',
+              confirmButtonText: 'はい',
+              confirmButtonColor: '#42ccae',
+              timerProgressBar: true,
+              timer: 3000,
             })
+              .then((result) => {
+                setTimeout(() => {
+                  this.$router.push('/');
+                }, 500); // 延遲 0.5 秒後跳頁
+              })
+          })
+          .catch((err) => {
+            console.log("錯誤", err);
+          })
+      }
+      // 新增模式
+      else {
+
+        let addNewsData = {
+          "news_title": this.newTitle,
+          "news_category": newCategory,
+          "news_create_date": this.newsCreateDate,
+          "news_update_date": this.newsUpdateDate,
+          "news_description": newDescription,
+        }
+
+        axios({
+          method: 'POST',
+          url: this.addNewsAPI,
+          data: addNewsData,
         })
-        .catch((err) => {
-          console.log("錯誤", err);
-        })
+          .then(response => {
+            const data = response.data;
+            console.log(data);
+
+            if (data.message !== "更新成功") {
+              this.$swal({
+                icon: 'success',
+                title: 'ニュース追加成功しました，自動的にニュース一覧に移動します',
+                confirmButtonText: 'はい',
+                confirmButtonColor: '#42ccae',
+                timerProgressBar: true,
+                timer: 3000,
+              })
+                .then((result) => {
+                  setTimeout(() => {
+                    this.$router.push('/');
+                  }, 500); // 延遲 0.5 秒後跳頁
+                })
+            } else {
+              this.$swal({
+                icon: 'error',
+                title: '有東西錯誤!',
+                timerProgressBar: true,
+                timer: 3000,
+              })
+            }
+
+          })
+          .catch((err) => {
+            console.log("錯誤", err);
+          })
+      }
     },
     cancel() {
       this.$swal({

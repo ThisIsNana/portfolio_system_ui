@@ -19,6 +19,9 @@ export default {
 
       //環境變數API
       showOneNewsAPI: import.meta.env.VITE_SHOW_ONE_NEWS,
+      updateReadingCountAPI: import.meta.env.VITE_UPDATE_READING_COUNT,
+      inactiveNewsAPI: import.meta.env.VITE_INACTIVE_NEWS,
+
 
       //讀取中
       isLoading: true,
@@ -55,8 +58,18 @@ export default {
           this.newsDescription = data.news.newsDescription;
           this.newsCreateDate = data.news.newsCreateDate;
           this.newsUpdateDate = data.news.newsUpdateDate;
-          this.newsReadingCount = data.news.newsReadingCount;
+          this.newsReadingCount = data.news.newsReadingCount + 1;
           this.isLoading = false;
+        }).then(result => {
+          axios({
+            method: 'POST',
+            url: this.updateReadingCountAPI,
+            data: { "update_news_id": newsId }
+          })
+            .then(response => {
+              const data = response.data;
+              console.log(data);
+            })
         })
         .catch(err => {
           console.log("錯誤:", err)
@@ -90,6 +103,8 @@ export default {
               icon: 'success',
               title: '削除しました。',
               footer: '意外に削除しまいましたか。<a href="#" target="_blank" style="color:red;">こちら</a>に管理者にご連絡ください',
+              confirmButtonText: '確認',
+              confirmButtonColor: '#64847d',
               timerProgressBar: true,
               timer: 3000,
             })
@@ -158,10 +173,7 @@ export default {
           </div>
         </div>
         <hr>
-        <div class="news_description">
-          <h4>
-            {{ newsDescription }}
-          </h4>
+        <div class="news_description" v-html="newsDescription">
         </div>
         <hr>
         <div class="fb">

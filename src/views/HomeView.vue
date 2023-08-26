@@ -41,11 +41,13 @@ export default {
           console.log(data);
 
           // 比較最後更新日期 => 排序
-          this.newsList = data.newsList.sort((a, b) => {
-            const dateA = new Date(a.newsUpdateDate);
-            const dateB = new Date(b.newsUpdateDate);
-            return dateB - dateA;
-          })
+          this.newsList = data.newsList
+            .filter(news => news.newsIsActive)
+            .sort((a, b) => {
+              const dateA = new Date(a.newsUpdateDate);
+              const dateB = new Date(b.newsUpdateDate);
+              return dateB - dateA;
+            })
 
           this.isSearchResult = true;
         })
@@ -99,13 +101,17 @@ export default {
 
           if (data.message === "查無相關資料") {
             this.isSearchResult = false;
-          } else {
+          }
+
+          else {
             // 比較最後更新日期 => 排序
-            this.newsList = data.newsList.sort((a, b) => {
-              const dateA = new Date(a.newsUpdateDate);
-              const dateB = new Date(b.newsUpdateDate);
-              return dateB - dateA;
-            })
+            this.newsList = data.newsList
+              .filter(news => news.newsIsActive)
+              .sort((a, b) => {
+                const dateA = new Date(a.newsUpdateDate);
+                const dateB = new Date(b.newsUpdateDate);
+                return dateB - dateA;
+              })
 
             this.isSearchResult = true;
           }
