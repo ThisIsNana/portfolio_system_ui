@@ -9,15 +9,15 @@ export default {
       newNews: null,
       selectedRadio: "existCategory",
 
-      newsCategory1: null, //選項用
-      newsCategory2: null,
+      newsCategory1: "", //選項用
+      newsCategory2: "",
 
       // 新資料
       newTitle: null,
       newCategory: null,
       newDescription: null,
-      selectedCategory1: null, //選中的
-      selectedCategory2: null,
+      selectedCategory1: "", //選中的
+      selectedCategory2: "",
       newsCreateDate: null, //存資料庫用
       newsUpdateDate: null,
 
