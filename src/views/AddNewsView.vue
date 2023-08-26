@@ -58,24 +58,27 @@ export default {
     if (newsId != 0) {
       // 編輯模式>>
       this.newNews = JSON.parse(sessionStorage.getItem('existNews'));
-      console.log(this.newNews);
+      // console.log(this.newNews);
     }
     else {
       // 新增模式>>
       this.newNews = JSON.parse(sessionStorage.getItem('newNews'));
-      console.log(this.newNews);
+      // console.log(this.newNews);
     }
 
-    this.newTitle = this.newNews.newsTitle;
-    this.newCategory = this.newNews.newsCategory;
-    this.showCreateDate = this.newNews.newsCreateDate;
-    this.showUpdateDate = today.toLocaleDateString();
-    this.newsUpdateDate = today;
-    this.content = this.newNews.newsDescription.replaceAll("<br>", "\n");
+    if (this.newNews !== null) {
+      this.newTitle = this.newNews.newsTitle;
+      this.newCategory = this.newNews.newsCategory;
+      this.content = this.newNews.newsDescription.replaceAll("<br>", "\n");
+      let newCategoryArr = this.newCategory.split(",");
+      this.selectedCategory1 = newCategoryArr[0];
+      this.selectedCategory2 = newCategoryArr[1];
+    }
 
-    let newCategoryArr = this.newCategory.split(",");
-    this.selectedCategory1 = newCategoryArr[0];
-    this.selectedCategory2 = newCategoryArr[1];
+    this.showCreateDate = today.toLocaleDateString();
+    this.showUpdateDate = today.toLocaleDateString();
+    this.newsCreateDate = today;
+    this.newsUpdateDate = today;
 
     // 抓完session就跑出畫面!
     this.isLoading = false;
@@ -105,7 +108,6 @@ export default {
           "update_description": newDescription,
         }
 
-
         axios({
           method: 'POST',
           url: this.updateNewsAPI,
@@ -113,7 +115,7 @@ export default {
         })
           .then(response => {
             const data = response.data;
-            console.log(data);
+            // console.log(data);
 
             this.$swal({
               icon: 'success',
@@ -124,6 +126,7 @@ export default {
               timer: 3000,
             })
               .then((result) => {
+                sessionStorage.removeItem("existNews");
                 setTimeout(() => {
                   this.$router.push('/');
                 }, 500); // 延遲 0.5 秒後跳頁
@@ -144,6 +147,16 @@ export default {
           "news_description": newDescription,
         }
 
+        // 測試抓的格式對不對
+        // if (typeof this.newsCreateDate === 'object' && this.newsCreateDate instanceof Date) {
+        //   console.log('這是一個日期（Date）物件!');
+        // } else if (typeof this.newsCreateDate === 'string') {
+        //   console.log('這是一個字符串（String）');
+        // } else {
+        //   console.log('這不是一個日期或字符串');
+        // }
+
+
         axios({
           method: 'POST',
           url: this.addNewsAPI,
@@ -151,7 +164,7 @@ export default {
         })
           .then(response => {
             const data = response.data;
-            console.log(data);
+            // console.log(data);
 
             if (data.message !== "更新成功") {
               this.$swal({
@@ -163,6 +176,7 @@ export default {
                 timer: 3000,
               })
                 .then((result) => {
+                  sessionStorage.removeItem("newNews");
                   setTimeout(() => {
                     this.$router.push('/');
                   }, 500); // 延遲 0.5 秒後跳頁
